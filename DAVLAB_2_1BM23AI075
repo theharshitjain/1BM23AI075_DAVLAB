@@ -1,0 +1,80 @@
+import pandas as pd
+
+csv_data = """Date,Region,Salesperson,Product,Units Sold,Price per Unit,Revenue
+2024-01-01,North,Alice,Widget A,10,20,200
+2024-01-02,North,Bob,Widget B,5,30,150
+2024-01-02,South,Charlie,Widget A,15,20,300
+2024-01-03,East,Alice,Widget A,12,20,240
+2024-01-03,North,Bob,Widget A,20,20,400
+2024-01-04,West,David,Widget B,8,30,240
+2024-01-05,South,Charlie,Widget B,10,30,300
+2024-01-05,East,Alice,Widget B,9,30,270
+"""
+
+with open('sales_data.csv', 'w') as f:
+    print("created")
+    f.write(csv_data)
+
+
+
+import pandas as pd
+
+df = pd.read_csv('sales_data.csv')
+df['Date'] = pd.to_datetime(df['Date'])
+
+revenue_by_salesperson_date = df.pivot_table(
+    index='Date', 
+    columns='Salesperson', 
+    values='Revenue', 
+    aggfunc='sum'
+).fillna(0)
+print("--- 1. Total Revenue by Salesperson on Each Date ---")
+print(revenue_by_salesperson_date)
+print("\n" + "="*50 + "\n")
+
+avg_revenue_per_product = df.groupby('Product')['Revenue'].mean().round(2).reset_index(name='Average Revenue')
+print("--- 2. Average Revenue per Sale for Each Product ---")
+print(avg_revenue_per_product)
+print("\n" + "="*50 + "\n")
+
+max_units_sold = df.groupby('Salesperson')['Units Sold'].max().reset_index(name='Max Units Sold')
+print("--- 3. Max Units Sold in a Single Transaction by Salesperson ---")
+print(max_units_sold)
+print("\n" + "="*50 + "\n")
+
+region_revenue = df.groupby('Region')['Revenue'].sum()
+total_revenue = region_revenue.sum()
+revenue_percentage = ((region_revenue / total_revenue) * 100).round(2).reset_index(name='Revenue Percentage (%)')
+print("--- 4. Percentage of Total Revenue by Region ---")
+print(revenue_percentage)
+print("\n" + "="*50 + "\n")
+
+transaction_counts = df['Salesperson'].value_counts()
+most_transactions_salesperson = transaction_counts.idxmax()
+most_transactions_count = transaction_counts.max()
+print("--- 5. Salesperson with the Most Sales Transactions ---")
+print(f"Salesperson: {most_transactions_salesperson}")
+print(f"Number of Transactions: {most_transactions_count}")
+print("\nAll transaction counts:")
+print(transaction_counts.reset_index(name='Transaction Count').rename(columns={'index': 'Salesperson'}))
+print("\n" + "="*50 + "\n")
+
+pivot_revenue_units = df.pivot_table(
+    index='Salesperson', 
+    columns='Product', 
+    values=['Revenue', 'Units Sold'], 
+    aggfunc='sum'
+).fillna(0)
+print("--- 6. Total Revenue and Units by Salesperson and Product (Pivot) ---")
+print(pivot_revenue_units)
+print("\n" + "="*50 + "\n")
+
+pivot_units_by_region_date = df.pivot_table(
+    index='Date', 
+    columns='Region', 
+    values='Units Sold', 
+    aggfunc='sum'
+).fillna(0)
+print("--- 7. Total Units Sold by Region on Each Date (Pivot) ---")
+print(pivot_units_by_region_date)
+print("\n" + "="*50 + "\n")
