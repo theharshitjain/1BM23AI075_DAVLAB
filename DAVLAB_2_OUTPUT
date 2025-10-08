@@ -1,0 +1,73 @@
+created
+--- 1. Total Revenue by Salesperson on Each Date ---
+Salesperson  Alice    Bob  Charlie  David
+Date                                     
+2024-01-01   200.0    0.0      0.0    0.0
+2024-01-02     0.0  150.0    300.0    0.0
+2024-01-03   240.0  400.0      0.0    0.0
+2024-01-04     0.0    0.0      0.0  240.0
+2024-01-05   270.0    0.0    300.0    0.0
+
+==================================================
+
+--- 2. Average Revenue per Sale for Each Product ---
+    Product  Average Revenue
+0  Widget A            285.0
+1  Widget B            240.0
+
+==================================================
+
+--- 3. Max Units Sold in a Single Transaction by Salesperson ---
+  Salesperson  Max Units Sold
+0       Alice              12
+1         Bob              20
+2     Charlie              15
+3       David               8
+
+==================================================
+
+--- 4. Percentage of Total Revenue by Region ---
+  Region  Revenue Percentage (%)
+0   East                   24.29
+1  North                   35.71
+2  South                   28.57
+3   West                   11.43
+
+==================================================
+
+--- 5. Salesperson with the Most Sales Transactions ---
+Salesperson: Alice
+Number of Transactions: 3
+
+All transaction counts:
+  Salesperson  Transaction Count
+0       Alice                  3
+1         Bob                  2
+2     Charlie                  2
+3       David                  1
+
+==================================================
+
+--- 6. Total Revenue and Units by Salesperson and Product (Pivot) ---
+             Revenue          Units Sold         
+Product     Widget A Widget B   Widget A Widget B
+Salesperson                                      
+Alice          440.0    270.0       22.0      9.0
+Bob            400.0    150.0       20.0      5.0
+Charlie        300.0    300.0       15.0     10.0
+David            0.0    240.0        0.0      8.0
+
+==================================================
+
+--- 7. Total Units Sold by Region on Each Date (Pivot) ---
+Region      East  North  South  West
+Date                                
+2024-01-01   0.0   10.0    0.0   0.0
+2024-01-02   0.0    5.0   15.0   0.0
+2024-01-03  12.0   20.0    0.0   0.0
+2024-01-04   0.0    0.0    0.0   8.0
+2024-01-05   9.0    0.0   10.0   0.0
+
+==================================================
+
+​
