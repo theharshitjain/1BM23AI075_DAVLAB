@@ -1,0 +1,60 @@
+
+import pandas as pd
+
+data = {
+    'Country': ['USA', 'USA', 'China', 'China', 'Germany', 'Germany'],
+    'Year': [2020, 2021, 2020, 2021, 2020, 2021],
+    'Population': [331000000, 332000000, 1400000000, 1405000000, 83000000, 83100000],
+    'GDP': [21000000, 21500000, 14300000, 15000000, 4200000, 4250000],
+    'Life_Expectancy': [78.5, 78.7, 76.9, 77.1, 81.3, 81.5]
+}
+
+df = pd.DataFrame(data)
+
+df.to_csv('data.csv', index=False)
+print("CSV file created!")
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('data.csv')
+
+# Step 2: Set multi-index
+df.set_index(['Country', 'Year'], inplace=True)
+print(df)
+
+# Step 3: Calculations
+print(df['Population'].mean())
+print(df['GDP'].sum())
+print(df['Life_Expectancy'].max())
+print(df['GDP'].min())
+
+print(np.mean(df['Population']))
+print(np.std(df['GDP']))
+print(np.sum(df['GDP']))
+
+# Step 4: Modify GDP by increasing it 10%
+df['GDP'] = df['GDP'].apply(lambda x: x * 1.10)
+print(df)
+
+# Step 5: Swap index levels and sort
+df_swapped = df.swaplevel().sort_index()
+print(df_swapped)
+
+# Step 6: Unstack by 'Year'
+df_unstacked = df.unstack(level='Year')
+print(df_unstacked)
+
+# Step 7: Access China's population data
+print(df.loc['China', 'Population'])
+
