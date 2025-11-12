@@ -1,0 +1,27 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load dataset (example file name: uber-raw-data-aug14.csv)
+df = pd.read_csv("uber-raw-data-aug14.csv")
+
+# Convert 'Date/Time' column to datetime format
+df['Date/Time'] = pd.to_datetime(df['Date/Time'])
+
+# Extract only the date part
+df['Date'] = df['Date/Time'].dt.date
+
+# Group by date to count total pickups per day
+daily_pickups = df.groupby('Date').size()
+
+# Plot line chart
+plt.figure(figsize=(12, 6))
+plt.plot(daily_pickups.index, daily_pickups.values, marker='o', linestyle='-', color='teal')
+
+plt.title('Uber Pickups in August 2014', fontsize=16)
+plt.xlabel('Date')
+plt.ylabel('Number of Pickups')
+plt.grid(True)
+plt.tight_layout()
+
+# Display chart
+plt.show()
