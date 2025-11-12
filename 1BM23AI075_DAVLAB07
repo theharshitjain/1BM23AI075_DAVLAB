@@ -1,0 +1,49 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("uber-raw-data-aug14.csv")
+df['Date/Time'] = pd.to_datetime(df['Date/Time'])
+
+def classify_region(lat, lon):
+    if 40.70 <= lat <= 40.85 and -74.02 <= lon <= -73.93:
+        return 'Manhattan'
+    elif 40.57 <= lat <= 40.74 and -74.05 <= lon <= -73.85:
+        return 'Brooklyn'
+    elif 40.84 <= lat < 40.91 and -73.92 <= lon <= -73.77:
+        return 'Bronx'
+    elif 40.65 <= lat <= 40.80 and -73.90 <= lon <= -73.70:
+        return 'Queens'
+    elif 40.48 <= lat <= 40.65 and -74.25 <= lon <= -74.05:
+        return 'Staten Island'
+    else:
+        return 'Other'
+
+df['Region'] = df.apply(lambda x: classify_region(x['Lat'], x['Lon']), axis=1)
+region_pickups = df.groupby('Region').size().reset_index(name='Pickups')
+
+region_centers = {
+    'Manhattan': (-73.97, 40.78),
+    'Brooklyn': (-73.95, 40.67),
+    'Bronx': (-73.88, 40.85),
+    'Queens': (-73.82, 40.74),
+    'Staten Island': (-74.15, 40.58),
+    'Other': (-73.9, 40.7)
+}
+
+region_pickups['Lon'] = region_pickups['Region'].map(lambda x: region_centers[x][0])
+region_pickups['Lat'] = region_pickups['Region'].map(lambda x: region_centers[x][1])
+
+plt.figure(figsize=(10,8))
+plt.scatter(region_pickups['Lon'], region_pickups['Lat'],
+            s=region_pickups['Pickups'] / 50, c=region_pickups['Pickups'],
+            cmap='YlOrRd', alpha=0.6, edgecolors='k')
+
+for i, row in region_pickups.iterrows():
+    plt.text(row['Lon'], row['Lat'], row['Region'], fontsize=10, ha='center', va='center')
+
+plt.title('Uber Pickups by Region - August 2014', fontsize=16)
+plt.xlabel('Longitude', fontsize=12)
+plt.ylabel('Latitude', fontsize=12)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
